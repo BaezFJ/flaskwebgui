@@ -7,7 +7,6 @@ import psutil
 import logging
 import tempfile
 import platform
-import webbrowser
 import subprocess
 import socketserver
 import multiprocessing
@@ -27,7 +26,6 @@ if not logger.handlers:
 FLASKWEBGUI_USED_PORT = None
 FLASKWEBGUI_BROWSER_PROCESS = None
 
-DEFAULT_BROWSER = webbrowser.get().name
 OPERATING_SYSTEM = platform.system().lower()
 PY = "python3" if OPERATING_SYSTEM in ["linux", "darwin"] else "python"
 
@@ -97,20 +95,9 @@ def close_application():
 
 
 def find_browser_in_paths(browser_paths: List[str]):
-
-    compatible_browser_path = None
     for path in browser_paths:
-
-        if not os.path.exists(path):
-            continue
-
-        if compatible_browser_path is None:
-            compatible_browser_path = path
-
-        if DEFAULT_BROWSER in path:
+        if os.path.exists(path):
             return path
-
-    return compatible_browser_path
 
 
 browser_path_dispacher: Dict[str, Callable[[], str]] = {
